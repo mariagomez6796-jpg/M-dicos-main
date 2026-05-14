@@ -1,19 +1,29 @@
 package com.example.CRUDG.service;
 
-import com.example.CRUDG.entity.Block;
-import com.example.CRUDG.repository.BlockRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.CRUDG.entity.Block;
+import com.example.CRUDG.repository.BlockRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Service
 public class BlockService {
 
     @Autowired
     private BlockRepository blockRepository;
+
+    private final ObjectMapper mapper = new ObjectMapper()
+            .enable(SerializationFeature.INDENT_OUTPUT);
 
     public String hash(String input) {
         try {
@@ -41,7 +51,6 @@ public class BlockService {
         String timestamp = LocalDateTime.now().toString();
 
         String input = index + timestamp + data + prevHash;
-
         String newHash = hash(input);
 
         Block block = new Block();
@@ -52,6 +61,28 @@ public class BlockService {
         block.setHash(newHash);
 
         blockRepository.save(block);
+
+        exportToJson(); // NUEVO
+    }
+
+    public void exportToJson() {
+        try {
+            List<Block> blocks = blockRepository.findAllByOrderByBlockIndexAsc();
+
+            Path outputDir = Paths.get("/app/output");
+            if (!Files.exists(outputDir)) {
+                outputDir = Paths.get("output");
+            }
+            Files.createDirectories(outputDir);
+
+            File file = outputDir.resolve("blockchain.json").toFile();
+
+            mapper.writeValue(file, blocks);
+
+            System.out.println("Blockchain exportada a JSON correctamente en: " + file.getAbsolutePath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean validate() {
@@ -77,4 +108,6 @@ public class BlockService {
 
         return true;
     }
+
+
 }

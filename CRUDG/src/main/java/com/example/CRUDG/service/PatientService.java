@@ -2,8 +2,10 @@ package com.example.CRUDG.service;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.example.CRUDG.entity.Patient;
 import com.example.CRUDG.repository.PatientRepository;
 
@@ -97,6 +99,10 @@ public class PatientService {
     );
 
     patientRepository.deleteById(id);
+    }
+
+    public Optional<Patient> findByEmail(String email) {
+        return patientRepository.findByEmailAddress(email);
     }
 
 

@@ -1,5 +1,7 @@
 package com.example.CRUDG.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import com.example.CRUDG.security.JwtFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import java.util.Arrays;
+
+import com.example.CRUDG.security.JwtFilter;
 
 
 
@@ -46,6 +48,7 @@ public class SecurityConfig {
             //.requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
             //endpoinds publicos
                 .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/api/v1/blockchain/**").permitAll()
                 .requestMatchers("/api/v1/patients/register").permitAll()
                 //edpoinds protegisdos por rol
                 .requestMatchers("/api/v1/admin/**", "/api/v1/admin").permitAll()//hasRole("Admin")

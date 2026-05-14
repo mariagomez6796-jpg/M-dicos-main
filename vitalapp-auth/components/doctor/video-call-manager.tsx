@@ -1,5 +1,3 @@
-video-call-manager.tsx:
-
 "use client"
 
 import { useState } from "react"
@@ -69,7 +67,7 @@ export function VideoCallManager() {
       }
       const res = await createRoom(user.token)
       try { await navigator.clipboard.writeText(res.code) } catch {}
-      alert(Sala creada: ${res.code} (copiado al portapapeles))
+      alert(`Sala creada: ${res.code} (copiado al portapapeles)`)
       setIsCreateDialogOpen(false)
     } catch (e: any) {
       alert(e?.message || "Error al crear la sala")
@@ -82,7 +80,7 @@ export function VideoCallManager() {
       alert("Ingresa el ID de sala")
       return
     }
-    router.push(/call/${encodeURIComponent(code)})
+    router.push(`/call/${encodeURIComponent(code)}`)
   }
 
   return (

@@ -1,10 +1,11 @@
 package com.example.CRUDG.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
 import com.example.CRUDG.entity.Doctor;
 import com.example.CRUDG.repository.DoctorRepository;
 
@@ -18,6 +19,8 @@ public class DoctorService {
 
     @Autowired
     private PasswordService passwordService;
+    @Autowired
+        private BlockService blockService;
 
     public List<Doctor> getAllDoctors() {
         return doctorRepository.findAll();
@@ -28,39 +31,69 @@ public class DoctorService {
     }
 
     public Doctor saveOrUpdate(Doctor doctor) {
-        // Hash the password before saving or updating
-        doctor.setPassword(passwordService.hashPassword(doctor.getPassword()));
-        return doctorRepository.save(doctor);
-    }
+    doctor.setPassword(passwordService.hashPassword(doctor.getPassword()));
+
+    Doctor saved = doctorRepository.save(doctor);
+
+    blockService.addBlock(
+        "CREATE_DOCTOR ID=" + saved.getId() +
+        " NAME=" + saved.getName() +
+        " EMAIL=" + saved.getEmail()
+    );
+
+    return saved;
+}
 
     public Doctor updateDoctor(Long id, Doctor updatedDoctor) {
-        return doctorRepository.findById(id).map(doctor -> {
-            doctor.setName(updatedDoctor.getName());
-            doctor.setEmail(updatedDoctor.getEmail());
-            // Hash the password before updating, only when a new password was provided
-            String newPassword = updatedDoctor.getPassword();
-            if (newPassword != null && !newPassword.isBlank()) {
-                doctor.setPassword(passwordService.hashPassword(newPassword));
-            }
+    return doctorRepository.findById(id).map(doctor -> {
 
+        String oldName = doctor.getName();
 
-            
-            return doctorRepository.save(doctor);
-        }).orElseGet(() -> {
-            // If doctor not found, save as new
-            updatedDoctor.setId(id);
-            // Hash the password before saving if provided
-            String newPassword = updatedDoctor.getPassword();
-            if (newPassword != null && !newPassword.isBlank()) {
-                updatedDoctor.setPassword(passwordService.hashPassword(newPassword));
-            }
-            return doctorRepository.save(updatedDoctor);
-        });
-    }
+        doctor.setName(updatedDoctor.getName());
+        doctor.setEmail(updatedDoctor.getEmail());
+
+        String newPassword = updatedDoctor.getPassword();
+        if (newPassword != null && !newPassword.isBlank()) {
+            doctor.setPassword(passwordService.hashPassword(newPassword));
+        }
+
+        Doctor saved = doctorRepository.save(doctor);
+
+        blockService.addBlock(
+            "UPDATE_DOCTOR ID=" + saved.getId() +
+            " OLD_NAME=" + oldName +
+            " NEW_NAME=" + saved.getName()
+        );
+
+        return saved;
+
+    }).orElseGet(() -> {
+
+        updatedDoctor.setId(id);
+
+        String newPassword = updatedDoctor.getPassword();
+        if (newPassword != null && !newPassword.isBlank()) {
+            updatedDoctor.setPassword(passwordService.hashPassword(newPassword));
+        }
+
+        Doctor saved = doctorRepository.save(updatedDoctor);
+
+        blockService.addBlock(
+            "CREATE_DOCTOR(FROM_UPDATE) ID=" + saved.getId()
+        );
+
+        return saved;
+    });
+}
 
     public void delete(Long id) {
-        doctorRepository.deleteById(id);
-    }
+
+    blockService.addBlock(
+        "DELETE_DOCTOR ID=" + id
+    );
+
+    doctorRepository.deleteById(id);
+}
 
     public Optional<Doctor> findByEmail(String email) {
     return doctorRepository.findByEmail(email);
