@@ -108,6 +108,9 @@ public class BlockService {
 
         return true;
     }
+    public List<Block> getAllBlocks() {
+    return blockRepository.findAllByOrderByBlockIndexAsc();
+}
 
 
 }
