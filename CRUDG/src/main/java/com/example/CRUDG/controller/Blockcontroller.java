@@ -17,7 +17,7 @@ import com.example.CRUDG.service.BlockService;
 
 @RestController
 @RequestMapping("api/v1/blockchain")
-public class BlockController {
+public class  BlockController {
 
     @Autowired
     private BlockService blockService;
@@ -29,9 +29,9 @@ public class BlockController {
         boolean isValid = blockService.validate();
 
         if (isValid) {
-            return "Cadena válida ✅";
+            return "Cadena válida ";
         } else {
-            return "Cadena CORRUPTA ❌";
+            return "Cadena CORRUPTA ";
         }
     }
 
