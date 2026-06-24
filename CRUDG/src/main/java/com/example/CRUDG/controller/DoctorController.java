@@ -64,7 +64,11 @@ public Doctor updateDoctor(@PathVariable("doctorId") Long doctorId, @RequestBody
      return doctorService.updateDoctor(doctorId, doctor);
 }
 
-
+@PutMapping("/profile/settings/{doctorId}")
+public Doctor updateProfileSettings(@PathVariable("doctorId") Long doctorId, @RequestBody Doctor doctor) {
+    // Dedicated endpoint for updating signature and logo
+    return doctorService.updateDoctor(doctorId, doctor);
+}
 
     @DeleteMapping("/{doctorId}")
     public void saveUpdate(@PathVariable("doctorId") Long doctorId) {

@@ -13,7 +13,7 @@ CREATE TABLE `tbl_treatment` (
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_appointment` (`appointment_id`),
-  -- Foreign Keys
+
   FOREIGN KEY (`appointment_id`) REFERENCES `tbl_appointment`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`patient_id`) REFERENCES `tbl_patient`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`doctor_id`) REFERENCES `tbl_doctor`(`id`) ON DELETE CASCADE

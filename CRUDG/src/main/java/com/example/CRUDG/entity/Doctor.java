@@ -29,7 +29,11 @@ public class Doctor {
 
     private String specialty;
     
-   
+    @Column(name = "signature_data", columnDefinition = "LONGTEXT")
+    private String signatureData;
+    
+    @Column(name = "hospital_logo", columnDefinition = "LONGTEXT")
+    private String hospitalLogo;
 
     
 }

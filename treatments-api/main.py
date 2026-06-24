@@ -2,7 +2,7 @@ import mysql.connector
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 import os
 
 app = FastAPI()
@@ -39,6 +39,10 @@ class TreatmentCreate(BaseModel):
     appointment_id: int
     diagnosis: str
     medicines: List[MedicineItem]
+
+class DoctorProfileSettings(BaseModel):
+    signatureData: Optional[str] = None
+    hospitalLogo: Optional[str] = None
 
 # --- Endpoints ---
 
@@ -105,9 +109,19 @@ def get_patient_treatments(patient_id: int):
     cursor = db.cursor(dictionary=True)
     
     query = """
-        SELECT t.*, d.name as doctor_name, d.specialty 
+        SELECT t.*,
+               d.name as doctor_name,
+               d.specialty as doctor_specialty,
+               d.phone_number as hospital_phone,
+               d.email_address as hospital_email,
+               d.signature_data,
+               d.hospital_logo,
+               p.name as patient_name,
+               p.email_address as patient_email,
+               p.phone as patient_phone
         FROM tbl_treatment t
         JOIN tbl_doctor d ON t.doctor_id = d.id
+        JOIN tbl_patient p ON t.patient_id = p.id
         WHERE t.patient_id = %s
         ORDER BY t.created_at DESC
     """
@@ -196,3 +210,79 @@ def get_doctor_treatments(doctor_id: int):
 
 
 
+
+
+# --- Doctor Profile Settings Endpoint ---
+@app.get("/api/v1/doctor/{doctor_id}")
+def get_doctor_profile(doctor_id: int):
+    """Get doctor profile including signature and logo"""
+    db = conectar_db()
+    if not db: 
+        raise HTTPException(status_code=500, detail="Error DB")
+    cursor = db.cursor(dictionary=True)
+    
+    try:
+        # CORRECCIÓN: phone_number as phoneNumber
+        query = """
+            SELECT id, name, email_address as email, phone_number as phoneNumber, specialty, 
+                   signature_data as signatureData, hospital_logo as hospitalLogo
+            FROM tbl_doctor 
+            WHERE id = %s
+        """
+        cursor.execute(query, (doctor_id,))
+        doctor = cursor.fetchone()
+        
+        if not doctor:
+            raise HTTPException(status_code=404, detail="Doctor no encontrado")
+            
+        return doctor
+    finally:
+        db.close()
+
+@app.put("/api/v1/doctor/profile/settings/{doctor_id}")
+def update_doctor_profile_settings(doctor_id: int, settings: DoctorProfileSettings):
+    """Update doctor signature and hospital logo with database persistence"""
+    db = conectar_db()
+    if not db: 
+        raise HTTPException(status_code=500, detail="Error DB")
+    cursor = db.cursor(dictionary=True)
+    
+    try:
+        # First verify the doctor exists
+        cursor.execute("SELECT id FROM tbl_doctor WHERE id = %s", (doctor_id,))
+        doctor = cursor.fetchone()
+        
+        if not doctor:
+            raise HTTPException(status_code=404, detail="Doctor no encontrado")
+        
+        # Update signature and logo in database
+        update_query = """
+            UPDATE tbl_doctor 
+            SET signature_data = %s, hospital_logo = %s
+            WHERE id = %s
+        """
+        cursor.execute(update_query, (
+            settings.signatureData,
+            settings.hospitalLogo,
+            doctor_id
+        ))
+        
+        # Commit the transaction to persist changes
+        db.commit()
+        
+        # CORRECCIÓN AQUÍ TAMBIÉN: phone_number as phoneNumber
+        cursor.execute("""
+            SELECT id, name, email_address as email, phone_number as phoneNumber, specialty,
+                   signature_data as signatureData, hospital_logo as hospitalLogo
+            FROM tbl_doctor 
+            WHERE id = %s
+        """, (doctor_id,))
+        updated_doctor = cursor.fetchone()
+        
+        return updated_doctor
+        
+    except mysql.connector.Error as err:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Error SQL: {err.msg}")
+    finally:
+        db.close()

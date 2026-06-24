@@ -2,12 +2,13 @@
 
 import { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calendar, FileText, History, Video, MessageCircle } from "lucide-react"
+import { Calendar, FileText, History, Video, MessageCircle, Settings } from "lucide-react"
 import { PendingAppointments } from "./pending-appointments"
 import { TreatmentManagement } from "./treatment-management"
 import { MedicalHistoryEditor } from "./medical-history-editor"
 import { VideoCallManager } from "./video-call-manager"
 import { ChatSystem } from "../shared/chat-system"
+import { ProfileSettings } from "./profile-settings"
 
 export function DoctorDashboard() {
   const [activeTab, setActiveTab] = useState("appointments")
@@ -20,7 +21,7 @@ export function DoctorDashboard() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
+        <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:inline-grid">
           <TabsTrigger value="appointments" className="gap-2">
             <Calendar className="w-4 h-4" />
             <span className="hidden sm:inline">Citas</span>
@@ -40,6 +41,10 @@ export function DoctorDashboard() {
           <TabsTrigger value="chat" className="gap-2">
             <MessageCircle className="w-4 h-4" />
             <span className="hidden sm:inline">Chat</span>
+          </TabsTrigger>
+          <TabsTrigger value="settings" className="gap-2">
+            <Settings className="w-4 h-4" />
+            <span className="hidden sm:inline">Configuración</span>
           </TabsTrigger>
         </TabsList>
 
@@ -61,6 +66,10 @@ export function DoctorDashboard() {
 
         <TabsContent value="chat" className="space-y-4">
           <ChatSystem userRole="doctor" userName="Dr. María García" conversationWith="Juan Pérez" />
+        </TabsContent>
+
+        <TabsContent value="settings" className="space-y-4">
+          <ProfileSettings />
         </TabsContent>
       </Tabs>
     </div>

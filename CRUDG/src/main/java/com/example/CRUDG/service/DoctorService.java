@@ -49,12 +49,25 @@ public class DoctorService {
 
         String oldName = doctor.getName();
 
-        doctor.setName(updatedDoctor.getName());
-        doctor.setEmail(updatedDoctor.getEmail());
+        // Only update name and email if they are provided (not null)
+        if (updatedDoctor.getName() != null && !updatedDoctor.getName().isBlank()) {
+            doctor.setName(updatedDoctor.getName());
+        }
+        if (updatedDoctor.getEmail() != null && !updatedDoctor.getEmail().isBlank()) {
+            doctor.setEmail(updatedDoctor.getEmail());
+        }
 
         String newPassword = updatedDoctor.getPassword();
         if (newPassword != null && !newPassword.isBlank()) {
             doctor.setPassword(passwordService.hashPassword(newPassword));
+        }
+        
+        // Update signature and logo if provided (allow updates even if just these fields)
+        if (updatedDoctor.getSignatureData() != null) {
+            doctor.setSignatureData(updatedDoctor.getSignatureData());
+        }
+        if (updatedDoctor.getHospitalLogo() != null) {
+            doctor.setHospitalLogo(updatedDoctor.getHospitalLogo());
         }
 
         Doctor saved = doctorRepository.save(doctor);
