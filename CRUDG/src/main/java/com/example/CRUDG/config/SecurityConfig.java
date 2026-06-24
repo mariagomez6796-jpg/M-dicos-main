@@ -54,8 +54,14 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/admin/**", "/api/v1/admin").permitAll()//hasRole("Admin")
                 .requestMatchers("/api/v1/doctor/**", "/api/v1/doctor").permitAll()//hasAnyRole("Admin")
                 .requestMatchers("/api/v1/patient/**", "/api/v1/patient").permitAll()
-                //.requestMatchers("/api/v1/patients/**").permitAll()//hasAnyRole("Admin","Doctor")
-                .anyRequest().authenticated() // permite todo sin autenticación
+                .requestMatchers("/api/v1/patients/**").permitAll()
+                .requestMatchers("/api/v1/doctor/**", "/api/v1/doctor").permitAll()
+                .requestMatchers("/api/v1/doctors/**").permitAll()
+                .requestMatchers("/api/v1/medical-history/**").permitAll()
+                .requestMatchers("/api/v1/vital-signs/**").permitAll()
+                .requestMatchers("/api/v1/allergies/**").permitAll()
+                .requestMatchers("/api/v1/conditions/**").permitAll()
+                .anyRequest().authenticated()
             )
 
 

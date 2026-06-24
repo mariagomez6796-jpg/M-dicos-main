@@ -1,47 +1,250 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Search, Calendar, FileText, Pill, Activity } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Search, Calendar, FileText, AlertCircle, Loader2, ChevronLeft } from "lucide-react"
+import {
+  getPatients,
+  getCompletePatientHistory,
+  getPatientMedicalHistory,
+} from "@/services/medical-history.service"
 
-const mockPatientHistory = [
-  {
-    id: "1",
-    patient: "Juan Pérez",
-    email: "juan.perez@email.com",
-    lastVisit: "2024-01-15",
-    totalVisits: 8,
-    diagnoses: ["Hipertensión", "Diabetes tipo 2"],
-    currentMedications: ["Metformina", "Enalapril"],
-    allergies: ["Penicilina"],
-  },
-  {
-    id: "2",
-    patient: "María López",
-    email: "maria.lopez@email.com",
-    lastVisit: "2024-01-20",
-    totalVisits: 5,
-    diagnoses: ["Asma"],
-    currentMedications: ["Salbutamol"],
-    allergies: [],
-  },
-  {
-    id: "3",
-    patient: "Pedro Gómez",
-    email: "pedro.gomez@email.com",
-    lastVisit: "2024-01-18",
-    totalVisits: 12,
-    diagnoses: ["Artritis reumatoide", "Hipertensión"],
-    currentMedications: ["Metotrexato", "Losartán"],
-    allergies: ["Aspirina"],
-  },
-]
+interface Patient {
+  id: number
+  name: string
+  email: string
+}
+
+interface HistoryEntry {
+  id: number
+  patientId: number
+  patientName: string
+  doctorId: number
+  doctorName: string
+  doctorSpecialty: string
+  consultationDate: string
+  diagnosis: string
+  treatmentPlan: string
+  clinicalNotes: string
+  chiefComplaint: string
+}
+
+interface Allergy {
+  id: number
+  allergen: string
+  severity: string
+}
+
+interface Condition {
+  id: number
+  conditionName: string
+  status: string
+}
+
+interface CompleteHistory {
+  medicalHistory: HistoryEntry[]
+  allergies: Allergy[]
+  conditions: Condition[]
+}
 
 export function PatientHistoryView() {
   const [searchTerm, setSearchTerm] = useState("")
+  const [patients, setPatients] = useState<Patient[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
+  const [completeHistory, setCompleteHistory] = useState<CompleteHistory | null>(null)
+  const [historyEntries, setHistoryEntries] = useState<HistoryEntry[]>([])
+  const [loadingDetail, setLoadingDetail] = useState(false)
+
+  useEffect(() => {
+    loadPatients()
+  }, [])
+
+  const loadPatients = async () => {
+    try {
+      setLoading(true)
+      const data = await getPatients()
+      setPatients(Array.isArray(data) ? data : [])
+    } catch (err) {
+      console.error("Error loading patients:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const loadCompleteHistory = async (patient: Patient) => {
+    setSelectedPatient(patient)
+    setLoadingDetail(true)
+    try {
+      const [complete, history] = await Promise.all([
+        getCompletePatientHistory(patient.id),
+        getPatientMedicalHistory(patient.id),
+      ])
+      setCompleteHistory(complete)
+      setHistoryEntries(Array.isArray(history) ? history : [])
+    } catch (err) {
+      console.error("Error loading complete history:", err)
+    } finally {
+      setLoadingDetail(false)
+    }
+  }
+
+  const filteredPatients = patients.filter((p) =>
+    p.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
+  if (selectedPatient) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="sm" onClick={() => setSelectedPatient(null)}>
+            <ChevronLeft className="w-4 h-4 mr-1" /> Volver
+          </Button>
+          <div>
+            <h2 className="text-2xl font-bold">{selectedPatient.name}</h2>
+            <p className="text-muted-foreground">{selectedPatient.email}</p>
+          </div>
+        </div>
+
+        {loadingDetail ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Total Consultas
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold">{historyEntries.length}</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Condiciones
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold">{completeHistory?.conditions?.length || 0}</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Alergias
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold">{completeHistory?.allergies?.length || 0}</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {completeHistory?.conditions && completeHistory.conditions.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Condiciones</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {completeHistory.conditions.map((c) => (
+                      <Badge key={c.id} variant="secondary">
+                        {c.conditionName} {c.status && `(${c.status})`}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {completeHistory?.allergies && completeHistory.allergies.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-600" />
+                    Alergias
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {completeHistory.allergies.map((a) => (
+                      <Badge key={a.id} variant="destructive">
+                        {a.allergen} {a.severity && `(${a.severity})`}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Historial de Consultas</h3>
+              {historyEntries.length === 0 ? (
+                <Card>
+                  <CardContent className="py-8 text-center text-muted-foreground">
+                    No hay consultas registradas para este paciente.
+                  </CardContent>
+                </Card>
+              ) : (
+                historyEntries.map((entry) => (
+                  <Card key={entry.id}>
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-base">{entry.diagnosis}</CardTitle>
+                        <span className="text-sm text-muted-foreground">
+                          {new Date(entry.consultationDate).toLocaleDateString("es-ES")}
+                        </span>
+                      </div>
+                      <CardDescription>
+                        Dr. {entry.doctorName} {entry.doctorSpecialty && `- ${entry.doctorSpecialty}`}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      {entry.chiefComplaint && (
+                        <p className="text-sm">
+                          <span className="font-medium">Motivo:</span>{" "}
+                          <span className="text-muted-foreground">{entry.chiefComplaint}</span>
+                        </p>
+                      )}
+                      {entry.treatmentPlan && (
+                        <p className="text-sm">
+                          <span className="font-medium">Tratamiento:</span>{" "}
+                          <span className="text-muted-foreground">{entry.treatmentPlan}</span>
+                        </p>
+                      )}
+                      {entry.clinicalNotes && (
+                        <p className="text-sm">
+                          <span className="font-medium">Notas:</span>{" "}
+                          <span className="text-muted-foreground">{entry.clinicalNotes}</span>
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -60,77 +263,31 @@ export function PatientHistoryView() {
         />
       </div>
 
-      <div className="grid gap-6">
-        {mockPatientHistory.map((patient) => (
-          <Card key={patient.id}>
-            <CardHeader>
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                <div className="space-y-1">
-                  <CardTitle className="text-xl">{patient.patient}</CardTitle>
-                  <CardDescription>{patient.email}</CardDescription>
-                </div>
-                <Button variant="outline">
-                  <FileText className="w-4 h-4 mr-2" />
-                  Ver Historial Completo
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b">
-                <div className="flex items-center gap-2 text-sm">
-                  <Calendar className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Última visita:</span>
-                  <span className="font-medium">{patient.lastVisit}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Activity className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Total de visitas:</span>
-                  <span className="font-medium">{patient.totalVisits}</span>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <div>
-                  <p className="text-sm font-medium text-foreground mb-2">Diagnósticos</p>
-                  <div className="flex flex-wrap gap-2">
-                    {patient.diagnoses.map((diagnosis, index) => (
-                      <Badge key={index} variant="secondary">
-                        {diagnosis}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
-                    <Pill className="w-4 h-4" />
-                    Medicamentos Actuales
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {patient.currentMedications.map((medication, index) => (
-                      <Badge key={index} variant="outline">
-                        {medication}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                {patient.allergies.length > 0 && (
+      <div className="grid gap-4">
+        {filteredPatients.length === 0 ? (
+          <p className="text-muted-foreground text-center py-8">No se encontraron pacientes</p>
+        ) : (
+          filteredPatients.map((patient) => (
+            <Card
+              key={patient.id}
+              className="cursor-pointer hover:bg-accent/50 transition-colors"
+              onClick={() => loadCompleteHistory(patient)}
+            >
+              <CardHeader className="py-4">
+                <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-foreground mb-2">Alergias</p>
-                    <div className="flex flex-wrap gap-2">
-                      {patient.allergies.map((allergy, index) => (
-                        <Badge key={index} variant="destructive">
-                          {allergy}
-                        </Badge>
-                      ))}
-                    </div>
+                    <CardTitle className="text-lg">{patient.name}</CardTitle>
+                    {patient.email && <CardDescription>{patient.email}</CardDescription>}
                   </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                  <Button variant="outline" size="sm">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Ver Historial
+                  </Button>
+                </div>
+              </CardHeader>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   )

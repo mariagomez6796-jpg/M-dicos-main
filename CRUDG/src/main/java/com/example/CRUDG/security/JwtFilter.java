@@ -30,7 +30,12 @@ public class JwtFilter extends OncePerRequestFilter {
         || path.startsWith("/api/v1/patient/")
         || path.startsWith("/api/v1/patients/")
         || path.startsWith("/api/v1/doctor/")
-        || path.startsWith("/api/v1/admin/")) {
+        || path.startsWith("/api/v1/doctors/")
+        || path.startsWith("/api/v1/admin/")
+        || path.startsWith("/api/v1/medical-history/")
+        || path.startsWith("/api/v1/vital-signs/")
+        || path.startsWith("/api/v1/allergies/")
+        || path.startsWith("/api/v1/conditions/")) {
 
         filterChain.doFilter(request, response);
         return;
