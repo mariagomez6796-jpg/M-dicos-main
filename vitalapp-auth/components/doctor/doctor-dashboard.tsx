@@ -7,7 +7,8 @@ import { PendingAppointments } from "./pending-appointments"
 import { TreatmentManagement } from "./treatment-management"
 import { MedicalHistoryEditor } from "./medical-history-editor"
 import { VideoCallManager } from "./video-call-manager"
-import { ChatSystem } from "../shared/chat-system"
+import { DoctorChat } from "./doctor-chat"
+import { ChatProvider } from "@/contexts/chat-context"
 
 export function DoctorDashboard() {
   const [activeTab, setActiveTab] = useState("appointments")
@@ -60,7 +61,9 @@ export function DoctorDashboard() {
         </TabsContent>
 
         <TabsContent value="chat" className="space-y-4">
-          <ChatSystem userRole="doctor" userName="Dr. María García" conversationWith="Juan Pérez" />
+          <ChatProvider>
+            <DoctorChat />
+          </ChatProvider>
         </TabsContent>
       </Tabs>
     </div>

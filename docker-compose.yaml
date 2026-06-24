@@ -118,6 +118,80 @@ services:
       DB_USER: root
       DB_PASS: root
       DB_NAME: CRUDG  
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
+  chat-api:
+    build:
+      context: ./chat-api
+      dockerfile: Dockerfile
+    container_name: chat-api
+    restart: always
+    depends_on:
+      - mysql
+      - redis
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - ./chat-api:/app
+    ports:
+      - "8004:8000"  # External: localhost:8004, Internal: 8000
+    environment:
+      # Application
+      APP_NAME: chat-api
+      APP_VERSION: 1.0.0
+      APP_ENV: development
+      DEBUG: true
+      LOG_LEVEL: INFO
+      
+      # Database (shared MySQL)
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASS: root
+      DB_NAME: CRUDG
+      DB_POOL_SIZE: 20
+      DB_MAX_OVERFLOW: 10
+      
+      # Redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      REDIS_PASSWORD: ""
+      
+      # JWT (shared secret with backend)
+      JWT_SECRET_KEY: MiSuperClaveDeSeguridadParaVitalApp1234567890
+      JWT_ALGORITHM: HS256
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      
+      # WebSocket
+      WEBSOCKET_PING_INTERVAL: 30
+      WEBSOCKET_PING_TIMEOUT: 10
+      WEBSOCKET_MAX_CONNECTIONS_PER_USER: 5
+      WEBSOCKET_MESSAGE_MAX_SIZE: 10000
+      
+      # Rate Limiting
+      RATE_LIMIT_ENABLED: true
+      RATE_LIMIT_REQUESTS_PER_MINUTE: 60
+      
+      # External Services
+      APPOINTMENTS_API_URL: http://appointments-api:8000
+      APPOINTMENTS_API_TIMEOUT: 10
+      
+      # Conversation
+      CONVERSATION_EXPIRY_DAYS: 14
+      CONVERSATION_CLEANUP_INTERVAL_HOURS: 24
+      
+      # CORS
+      CORS_ORIGINS: http://localhost:3000
+
 
 volumes:
   mysql-data:
+  redis-data:

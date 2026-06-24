@@ -7,7 +7,8 @@ import { AppointmentBooking } from "./appointment-booking"
 import { MyAppointments } from "./my-appointments"
 import { PrescriptionsView } from "./prescriptions-view"
 import { PatientVideoCall } from "./patient-video-call"
-import { ChatSystem } from "../shared/chat-system"
+import { PatientChat } from "./patient-chat"
+import { ChatProvider } from "@/contexts/chat-context"
 
 export function PatientDashboard() {
   const [activeTab, setActiveTab] = useState("book")
@@ -60,7 +61,9 @@ export function PatientDashboard() {
         </TabsContent>
 
         <TabsContent value="chat" className="space-y-4">
-          <ChatSystem userRole="patient" userName="Juan Pérez" conversationWith="Dr. María García" />
+          <ChatProvider>
+            <PatientChat />
+          </ChatProvider>
         </TabsContent>
       </Tabs>
     </div>
