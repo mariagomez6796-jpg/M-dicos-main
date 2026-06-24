@@ -42,7 +42,24 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
+                String path = request.getServletPath();
+
+    // 🚫 Ignorar rutas públicas
+    if (path.startsWith("/api/v1/auth/")
+        || path.startsWith("/api/v1/patient/")
+        || path.startsWith("/api/v1/patients/")
+        || path.startsWith("/api/v1/doctor/")
+        || path.startsWith("/api/v1/doctors/")
+        || path.startsWith("/api/v1/admin/")
+        || path.startsWith("/api/v1/medical-history/")
+        || path.startsWith("/api/v1/vital-signs/")
+        || path.startsWith("/api/v1/allergies/")
+        || path.startsWith("/api/v1/conditions/")) {
+
+        filterChain.doFilter(request, response);
+        return;
+    }
+
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {

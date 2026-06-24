@@ -1,50 +1,141 @@
 [ {
   "id" : 1,
   "blockIndex" : 0,
-  "timestamp" : "2026-06-23",
-  "data" : "Genesis Block",
+  "timestamp" : "2026-05-07T03:43:24.427105998",
+  "data" : "CREATE_PATIENT ID=1 NAME=jose EMAIL=jose.lozano2487@alumnos.udg.mx",
   "prevHash" : "0",
-  "hash" : "0"
+  "hash" : "af9d5e34c5befff3d6aaace49fa295be532753590def9503203ddf226147242d"
 }, {
   "id" : 2,
   "blockIndex" : 1,
-  "timestamp" : "2026-06-23T21:57:58.708656349",
-  "data" : "CREATE_ADMIN ID=2 NAME=Gerardo Rubio EMAIL=admin@gmail.com",
-  "prevHash" : "0",
-  "hash" : "0214a31c821c0140d50e1852042cbf3d02cfa36f96f486e70f361471acc95473"
+  "timestamp" : "2026-05-14T15:27:23.646583527",
+  "data" : "CREATE_PATIENT ID=2 NAME=nata gonzales EMAIL=nata@gmail.com",
+  "prevHash" : "af9d5e34c5befff3d6aaace49fa295be532753590def9503203ddf226147242d",
+  "hash" : "43428831bebaf14be611415eea6953dd3a2625ee64b0be2ed9515430224529a7"
 }, {
   "id" : 3,
   "blockIndex" : 2,
-  "timestamp" : "2026-06-23T22:02:51.719353706",
-  "data" : "CREATE_ADMIN ID=3 NAME=Fernanda Gomez EMAIL=fer@gmail.com",
-  "prevHash" : "0214a31c821c0140d50e1852042cbf3d02cfa36f96f486e70f361471acc95473",
-  "hash" : "257150d762a79fce87491c7260124a48612f4e7c8439a3676b10323a35c67923"
+  "timestamp" : "2026-06-22T16:18:16.876998413",
+  "data" : "CREATE_PATIENT ID=6 NAME=Jose  EMAIL=jose.lozano2487@gmail.com",
+  "prevHash" : "43428831bebaf14be611415eea6953dd3a2625ee64b0be2ed9515430224529a7",
+  "hash" : "51db1bc0cc0698c6fdfcce61cade3bc7d3b8f0caac3364eb3208f70f66536e4e"
 }, {
   "id" : 4,
   "blockIndex" : 3,
-  "timestamp" : "2026-06-23T22:04:13.598739918",
-  "data" : "CREATE_DOCTOR ID=1 NAME=Chuy Lopez EMAIL=chuy@gmail.com",
-  "prevHash" : "257150d762a79fce87491c7260124a48612f4e7c8439a3676b10323a35c67923",
-  "hash" : "e3f3a19c87f488ca9baec50668e5ed4765d2797d90655682e93964989705e91e"
+  "timestamp" : "2026-06-22T16:40:07.171272786",
+  "data" : "CREATE_DOCTOR ID=1 NAME=Dr. Juan Pérez EMAIL=juan.perez@hospital.com",
+  "prevHash" : "51db1bc0cc0698c6fdfcce61cade3bc7d3b8f0caac3364eb3208f70f66536e4e",
+  "hash" : "b1af7a468649f41f799f1f9bd64d6aa3a0936cb36a8c7dfd073d18658a5b83a7"
 }, {
   "id" : 5,
   "blockIndex" : 4,
-  "timestamp" : "2026-06-23T22:05:38.963256131",
-  "data" : "CREATE_PATIENT ID=1 NAME=Mariano Lopez EMAIL=mariano@gmail.com",
-  "prevHash" : "e3f3a19c87f488ca9baec50668e5ed4765d2797d90655682e93964989705e91e",
-  "hash" : "aec9b538da439daeaaef6427e85413fc545215ca5d7e050aec2df4c4bbd9afb2"
+  "timestamp" : "2026-06-22T16:56:18.389138827",
+  "data" : "CREATE_ALLERGY PATIENT_ID=1 ALLERGEN=penicilina SEVERITY=null",
+  "prevHash" : "b1af7a468649f41f799f1f9bd64d6aa3a0936cb36a8c7dfd073d18658a5b83a7",
+  "hash" : "d72ba1a783a2cbd5cf8c4d62e90d715d356e4fe14f269043666069d0d231ef02"
 }, {
   "id" : 6,
   "blockIndex" : 5,
-  "timestamp" : "2026-06-24T00:39:54.885737693",
-  "data" : "CREATE_PATIENT ID=2 NAME=Marianita Lopez EMAIL=mariana@gmail.com",
-  "prevHash" : "aec9b538da439daeaaef6427e85413fc545215ca5d7e050aec2df4c4bbd9afb2",
-  "hash" : "2e68758430383651c5f97e8b4d6f69ee6adacdbecfcafa775d577e248a09b140"
+  "timestamp" : "2026-06-22T16:56:52.875543094",
+  "data" : "CREATE_ALLERGY PATIENT_ID=1 ALLERGEN=penicilina SEVERITY=null",
+  "prevHash" : "d72ba1a783a2cbd5cf8c4d62e90d715d356e4fe14f269043666069d0d231ef02",
+  "hash" : "33cc7aa0695986b530b263c137979fc8d500489114432b2f915e7b4b57548883"
 }, {
   "id" : 7,
   "blockIndex" : 6,
-  "timestamp" : "2026-06-24T16:35:37.744764537",
-  "data" : "CREATE_PATIENT ID=3 NAME=Juan Perez EMAIL=juan@gmail.com",
-  "prevHash" : "2e68758430383651c5f97e8b4d6f69ee6adacdbecfcafa775d577e248a09b140",
-  "hash" : "a7fb0424d16f4ecda2b7a74c606c1bd0845bfc282e13118d946e5c416acbf318"
+  "timestamp" : "2026-06-22T17:01:04.529828871",
+  "data" : "CREATE_ALLERGY PATIENT_ID=1 ALLERGEN=penicilina SEVERITY=null",
+  "prevHash" : "33cc7aa0695986b530b263c137979fc8d500489114432b2f915e7b4b57548883",
+  "hash" : "f0de886940cb0dd4dbec1f82d0c8b1a73f304d3dcfcb5742d84f813b9a164c42"
+}, {
+  "id" : 8,
+  "blockIndex" : 7,
+  "timestamp" : "2026-06-22T17:06:31.454782849",
+  "data" : "CREATE_ALLERGY PATIENT_ID=1 ALLERGEN=penicilina SEVERITY=null",
+  "prevHash" : "f0de886940cb0dd4dbec1f82d0c8b1a73f304d3dcfcb5742d84f813b9a164c42",
+  "hash" : "4cb23fa26e1f09149b00c9659106ed27379d6cf7ae695b01139f01e2d68c5844"
+}, {
+  "id" : 9,
+  "blockIndex" : 8,
+  "timestamp" : "2026-06-22T17:13:15.675729812",
+  "data" : "CREATE_ALLERGY PATIENT_ID=1 ALLERGEN=polen SEVERITY=null",
+  "prevHash" : "4cb23fa26e1f09149b00c9659106ed27379d6cf7ae695b01139f01e2d68c5844",
+  "hash" : "1d86c243926a63ab657e154ae77c0bcebb8e806b60007877bb11002e619f0686"
+}, {
+  "id" : 10,
+  "blockIndex" : 9,
+  "timestamp" : "2026-06-22T17:17:15.137260602",
+  "data" : "CREATE_CONDITION PATIENT_ID=2 CONDITION=diabetes STATUS=ACTIVE",
+  "prevHash" : "1d86c243926a63ab657e154ae77c0bcebb8e806b60007877bb11002e619f0686",
+  "hash" : "e3b2c5a1b9203d59e418e69b4574fdf73572fce0e0f4e5f7f054dc2250c5c44b"
+}, {
+  "id" : 11,
+  "blockIndex" : 10,
+  "timestamp" : "2026-06-22T17:30:18.438535743",
+  "data" : "CREATE_CONDITION PATIENT_ID=1 CONDITION=diabetes STATUS=ACTIVE",
+  "prevHash" : "e3b2c5a1b9203d59e418e69b4574fdf73572fce0e0f4e5f7f054dc2250c5c44b",
+  "hash" : "e7d7b2319dbdcd77dc759d3428b6ddf9bbd4f8b5428fe7fbfd7469925f0133b5"
+}, {
+  "id" : 12,
+  "blockIndex" : 11,
+  "timestamp" : "2026-06-22T17:31:31.165098770",
+  "data" : "CREATE_MEDICAL_HISTORY ID=1 PATIENT_ID=1 DOCTOR_ID=1 DIAGNOSIS=nada",
+  "prevHash" : "e7d7b2319dbdcd77dc759d3428b6ddf9bbd4f8b5428fe7fbfd7469925f0133b5",
+  "hash" : "c0900c6e4b4c31a5ea40c79d6d1d3725603d4ff05065eea593a6c0c94fdc7431"
+}, {
+  "id" : 13,
+  "blockIndex" : 12,
+  "timestamp" : "2026-06-22T17:37:08.384612598",
+  "data" : "CREATE_ALLERGY PATIENT_ID=1 ALLERGEN=penicilina SEVERITY=null",
+  "prevHash" : "c0900c6e4b4c31a5ea40c79d6d1d3725603d4ff05065eea593a6c0c94fdc7431",
+  "hash" : "6ec13d0fb4d90a6817297245c0ec57c71b5e092a90e62ce03b4dbe43873478cc"
+}, {
+  "id" : 14,
+  "blockIndex" : 13,
+  "timestamp" : "2026-06-22T17:53:28.131601714",
+  "data" : "CREATE_ALLERGY PATIENT_ID=1 ALLERGEN=polen SEVERITY=null",
+  "prevHash" : "6ec13d0fb4d90a6817297245c0ec57c71b5e092a90e62ce03b4dbe43873478cc",
+  "hash" : "005552abf892601f0bc0975f47813e2fc6f45670547a5a337864a8156dab9769"
+}, {
+  "id" : 15,
+  "blockIndex" : 14,
+  "timestamp" : "2026-06-22T17:57:33.069067466",
+  "data" : "CREATE_ALLERGY PATIENT_ID=6 ALLERGEN=penicilina SEVERITY=null",
+  "prevHash" : "005552abf892601f0bc0975f47813e2fc6f45670547a5a337864a8156dab9769",
+  "hash" : "85949423ed6f0c64f50f4f955beda96568f11a7c3e0fd750afb80abd1468158a"
+}, {
+  "id" : 16,
+  "blockIndex" : 15,
+  "timestamp" : "2026-06-22T18:02:47.758809715",
+  "data" : "CREATE_ALLERGY PATIENT_ID=2 ALLERGEN=penicilina SEVERITY=null",
+  "prevHash" : "85949423ed6f0c64f50f4f955beda96568f11a7c3e0fd750afb80abd1468158a",
+  "hash" : "edbdb521990bc1d23dbb2c94f4912948586b419a6c21d71ad90994507a5afa78"
+}, {
+  "id" : 17,
+  "blockIndex" : 16,
+  "timestamp" : "2026-06-22T18:06:19.837716314",
+  "data" : "CREATE_ALLERGY PATIENT_ID=6 ALLERGEN=polen SEVERITY=null",
+  "prevHash" : "edbdb521990bc1d23dbb2c94f4912948586b419a6c21d71ad90994507a5afa78",
+  "hash" : "a1e55eefb6538bf65a71fa318f6d45ee77cd937c896c8796a280afe6f6b3edcb"
+}, {
+  "id" : 18,
+  "blockIndex" : 17,
+  "timestamp" : "2026-06-24T16:39:52.784165066",
+  "data" : "CREATE_ALLERGY PATIENT_ID=1 ALLERGEN=alergia SEVERITY=null",
+  "prevHash" : "a1e55eefb6538bf65a71fa318f6d45ee77cd937c896c8796a280afe6f6b3edcb",
+  "hash" : "f55242b5b409c7b13565122390c87384f26e8989833057880aeae25cce44395e"
+}, {
+  "id" : 19,
+  "blockIndex" : 18,
+  "timestamp" : "2026-06-24T16:40:21.240759742",
+  "data" : "CREATE_CONDITION PATIENT_ID=1 CONDITION=diabetes STATUS=ACTIVE",
+  "prevHash" : "f55242b5b409c7b13565122390c87384f26e8989833057880aeae25cce44395e",
+  "hash" : "f6c570c0720273b9c144339a9c0fb99e5e3184f0fe60f4fc8605f58c3b444a0d"
+}, {
+  "id" : 20,
+  "blockIndex" : 19,
+  "timestamp" : "2026-06-24T16:41:31.925605775",
+  "data" : "CREATE_ALLERGY PATIENT_ID=1 ALLERGEN=polen SEVERITY=null",
+  "prevHash" : "f6c570c0720273b9c144339a9c0fb99e5e3184f0fe60f4fc8605f58c3b444a0d",
+  "hash" : "d480da26cae3ca587904c8303d483e23431f483c3adbf560a746944ee6eb832d"
 } ]

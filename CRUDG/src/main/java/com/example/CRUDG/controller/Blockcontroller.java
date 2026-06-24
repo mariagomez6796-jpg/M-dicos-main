@@ -17,7 +17,7 @@ import com.example.CRUDG.service.BlockService;
 
 @RestController
 @RequestMapping("api/v1/blockchain")
-public class  BlockController {
+public class  Blockcontroller {
 
     @Autowired
     private BlockService blockService;

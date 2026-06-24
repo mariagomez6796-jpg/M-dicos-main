@@ -2,12 +2,13 @@
 
 import { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calendar, FileText, Pill, Video, MessageCircle } from "lucide-react"
+import { Calendar, FileText, Pill, Video, MessageCircle, History } from "lucide-react"
 import { AppointmentBooking } from "./appointment-booking"
 import { MyAppointments } from "./my-appointments"
 import { PrescriptionsView } from "./prescriptions-view"
 import { PatientVideoCall } from "./patient-video-call"
 import { ChatSystem } from "../shared/chat-system"
+import { PatientMedicalHistory } from "./patient-medical-history"
 
 export function PatientDashboard() {
   const [activeTab, setActiveTab] = useState("book")
@@ -20,7 +21,7 @@ export function PatientDashboard() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
+        <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:inline-grid">
           <TabsTrigger value="book" className="gap-2">
             <Calendar className="w-4 h-4" />
             <span className="hidden sm:inline">Agendar</span>
@@ -32,6 +33,10 @@ export function PatientDashboard() {
           <TabsTrigger value="prescriptions" className="gap-2">
             <Pill className="w-4 h-4" />
             <span className="hidden sm:inline">Recetas</span>
+          </TabsTrigger>
+          <TabsTrigger value="history" className="gap-2">
+            <History className="w-4 h-4" />
+            <span className="hidden sm:inline">Historial</span>
           </TabsTrigger>
           <TabsTrigger value="video" className="gap-2">
             <Video className="w-4 h-4" />
@@ -53,6 +58,10 @@ export function PatientDashboard() {
 
         <TabsContent value="prescriptions" className="space-y-4">
           <PrescriptionsView />
+        </TabsContent>
+
+        <TabsContent value="history" className="space-y-4">
+          <PatientMedicalHistory />
         </TabsContent>
 
         <TabsContent value="video" className="space-y-4">
