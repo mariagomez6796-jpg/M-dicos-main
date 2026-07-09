@@ -21,6 +21,7 @@ Additionally, a simplified blockchain is implemented to record critical CRUD eve
 - Maria Fernanda Gomez Enriquez
 - Eduardo Caleb Martinez Arias
 - Jose Manuel Lozano Perez
+- Gerardo Josue Rubio Calderon
 
 Centro Universitario de Tonalá  
 Universidad de Guadalajara
